@@ -13,6 +13,8 @@ export class ByCountryComponent {
   termino : string = '';
   hayError: boolean = false;
   paises  : Country[] = [];
+  paisesSug : Country [] = [];
+  mostrarSug: boolean = false;
 
   constructor( private paisService: CountryService ) { }
 
@@ -20,6 +22,7 @@ export class ByCountryComponent {
     
     this.hayError = false;
     this.termino  = termino;
+    this.mostrarSug = false;
 
     this.paisService.searchByCountry( termino )
       .subscribe( (paises) => {
@@ -34,7 +37,12 @@ export class ByCountryComponent {
 
   sugerencias( termino: string ) {
     this.hayError = false;
-    // TODO: crear sugerencias
+    this.termino = termino;
+    this.mostrarSug = true;
+    this.paisService.searchByCountry(termino)
+      .subscribe(
+        paises => this.paisesSug = paises.splice(0,3),
+        (err)=> this.paisesSug = [])
   }
 
 }
